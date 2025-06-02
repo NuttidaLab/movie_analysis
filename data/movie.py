@@ -6,15 +6,15 @@ import librosa
 
 class Movie:
     
-    title = "Bang! You're Dead"
-    year = "1961"
-    director = "Alfred Hitchcock"
-    
     def __init__(self):
         pass
     
     def __repr__(self):
-        return f"Movie(title={self.title}, year={self.year}, director={self.director})"
+        return '''
+            Title: "Bang! You're Dead (1961)"
+            Director: "Alfred Hitchcock"
+            Duration: 478.847432 seconds
+        '''
     
     def frames(self, path="/bin/movie/frames"):
         files = sorted(glob.glob(f"{path}/_part*.npy"))

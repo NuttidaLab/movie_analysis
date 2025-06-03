@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+import numpy as np
 
 class Dataset(ABC):
     
@@ -22,15 +22,15 @@ class Dataset(ABC):
         return f"{title_line}\n{director_line}\n{duration_line}"
     
     def _rescale_time(self, us):
-        total_duration = (len(self.raw) - 1) * _unit_second()
+        total_duration = (len(self.raw) - 1) * self._unit_second()
         n_new = int(np.floor(total_duration / us)) + 1
         new_times = np.arange(n_new) * us
-        indices = np.floor(new_times / _unit_second()).astype(int)
+        indices = np.floor(new_times / self._unit_second()).astype(int)
         indices = np.clip(indices, 0, n_samples - 1)
         return indices
     
     @abstractmethod
-    def _unit_second(self) -> float: pass
+    def self._unit_second(self) -> float: pass
     
     @abstractmethod
     def _load(self): pass

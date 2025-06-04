@@ -1,3 +1,0 @@
-# Naturalistic Movie Analysis
-
-

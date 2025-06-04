@@ -87,7 +87,8 @@ class Spike(Dataset):
         return self._preprocess_spikes(pd.read_parquet(path), bin_dur=self._unit_second)
     
     def rescale(self, us: float) -> np.ndarray:
-        return self._preprocess_spikes(self.raw, bin_dur=us)
+        bins = (np.floor(self.raw.index.values / us) * us)
+        return self.raw.groupby(bins).mean()
     
     def _preprocess_spikes(self, spikes_df, bin_dur):
     
@@ -104,7 +105,7 @@ class Spike(Dataset):
 
         col_names = []
 
-        for id, neur in spikes_df.iterrows():
+        for idx, neur in spikes_df.iterrows():
 
             col_name = neur['hemi'] + '_' + neur['region'] + '_' + neur['neur_id']
             col_names.append(col_name)
@@ -114,7 +115,7 @@ class Spike(Dataset):
             enc_rates = enc_spike_counts / bin_dur
 
             # get base rates per bin
-            base_spike_counts, _ = np.histogram(neur['enc_spikes'], bins=enc_bin_edges)
+            base_spike_counts, _ = np.histogram(neur['base_spikes'], bins=base_bin_edges)
             base_rates = base_spike_counts / bin_dur
 
             # norm
@@ -125,6 +126,8 @@ class Spike(Dataset):
             enc_rate_smoothed = gaussian_filter1d(enc_rate_normed, sigma=1)
 
             # save
-            time_by_rates[:, id] = enc_rate_smoothed
+            time_by_rates[:, idx] = enc_rate_smoothed
 
-        return pd.DataFrame(time_by_rates, columns=col_names)
+        time_axis = np.arange(0, len(enc_bin_edges)-1) * bin_dur
+        
+        return pd.DataFrame(time_by_rates, columns=col_names, index=time_axis)

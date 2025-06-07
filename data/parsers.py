@@ -4,6 +4,7 @@ import numpy as np
 from tqdm import tqdm
 import librosa
 import pandas as pd
+import pickle
 from scipy.ndimage import gaussian_filter1d
 
 from data.abstract import Dataset
@@ -28,7 +29,28 @@ class Audio(Dataset):
         if not os.path.exists(path): raise FileNotFoundError(f"Audio file not found at {path}")
         samples, sr = librosa.load(path, sr=None)
         return samples
-    
+
+class People(Dataset):
+    _unit_second = 1/30  # People data is sampled at 30 Hz
+    def __init__(self): super().__init__()
+
+    def _load(self) -> np.ndarray:
+        # with open('bin/movie/short_faceannots.pkl', 'rb') as f:
+        path = os.path.join(os.path.dirname(__file__), "bin/movie/short_faceannots.pkl")
+        with open(path, 'rb') as f:
+            short_faceannots = pickle.load(f)
+        d = {"frame": [],"people": [],}
+        for key, item in short_faceannots.items():
+            d['frame'].append(int(key.split('_')[1]))
+            d['people'].append(len(item.keys()))
+            
+        df = pd.DataFrame(d)
+        df["time_s"]   = df["frame"] / 25.0
+        df["frame30"] = np.floor(df["time_s"] * 29.97002997002997).astype(int)
+        raw_people = np.zeros((14351))
+        raw_people[df.frame30.values] = df.people.values
+        return raw_people
+
 class Gaze(Dataset):
     _unit_second = 0.002  # Gaze data is sampled at 500 Hz, which is 0.002 seconds per sample
     def __init__(self): super().__init__()
@@ -100,8 +122,7 @@ class Spike(Dataset):
         base_bin_edges = np.arange(enc_stop, base_stop + bin_dur, bin_dur)
 
         # init
-        time_by_rates = np.zeros((len(enc_bin_edges)-1,
-                                len(spikes_df)))
+        time_by_rates = np.zeros((len(enc_bin_edges)-1, len(spikes_df)))
 
         col_names = []
 

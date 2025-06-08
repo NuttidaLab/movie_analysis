@@ -6,3 +6,5 @@
 /*.egg-info
 
 analysis/computed_datasets/*.wav
+
+.conda/

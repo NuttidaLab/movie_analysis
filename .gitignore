@@ -4,3 +4,5 @@
 .DS_Store
 
 /*.egg-info
+
+analysis/computed_datasets/*.wav

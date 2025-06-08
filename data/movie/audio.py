@@ -21,17 +21,17 @@ class Audio(Dataset):
     def __init__(self): super().__init__()
     
     def _load(self):
-        samples, sr = librosa.load(os.path.join(self._base_path, "../bin/movie/audio.wav"), sr=None)
+        samples, sr = librosa.load(os.path.join(self._base_path, "../bin/movie/audio/audio.wav"), sr=None)
         return samples
 
     @property
     def instruments(self):
-        volume, timbre = calculate_volume_and_timbre(os.path.join(self._base_path, "../bin/movie/accompaniment.wav"))
+        volume, timbre = calculate_volume_and_timbre(os.path.join(self._base_path, "../bin/movie/audio/accompaniment.wav"))
         return SimpleNamespace(volume=volume, timbre=timbre)
 
     @property
     def vocals(self):
-        volume, timbre = calculate_volume_and_timbre(os.path.join(self._base_path, "../bin/movie/vocals.wav"))
+        volume, timbre = calculate_volume_and_timbre(os.path.join(self._base_path, "../bin/movie/audio/vocals.wav"))
         return SimpleNamespace(volume=volume, timbre=timbre)
     
         

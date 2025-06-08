@@ -1,16 +1,39 @@
 from data.abstract import Dataset
+from data.utils import calculate_volume_and_timbre
 
 import os
 import glob
 import numpy as np
 import librosa
+from types import SimpleNamespace
+# from dataclasses import dataclass
 
+# @dataclass
+# class Source:
+#     volume: Dataset
+#     timbre:  Dataset
 
 class Audio(Dataset):
-    _unit_second = 1/48000 # Raw audio is sampled at 48000 Hz
+    # Raw audio is sampled at 48000 Hz
+    _unit_second = 1/48000 
+    _base_path = os.path.dirname(__file__)
+    
     def __init__(self): super().__init__()
     
     def _load(self):
-        path = os.path.join(os.path.dirname(__file__), "../bin/movie/audio.wav")
-        samples, sr = librosa.load(path, sr=None)
+        samples, sr = librosa.load(os.path.join(self._base_path, "../bin/movie/audio.wav"), sr=None)
         return samples
+
+    @property
+    def instruments(self):
+        volume, timbre = calculate_volume_and_timbre(os.path.join(self._base_path, "../bin/movie/accompaniment.wav"))
+        return SimpleNamespace(volume=volume, timbre=timbre)
+
+    @property
+    def vocals(self):
+        volume, timbre = calculate_volume_and_timbre(os.path.join(self._base_path, "../bin/movie/vocals.wav"))
+        return SimpleNamespace(volume=volume, timbre=timbre)
+    
+        
+        
+        

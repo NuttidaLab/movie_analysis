@@ -26,11 +26,13 @@ def calculate_volume_and_timbre(path, hop = 512, frame = 2048):
     return volume_ds, timbre_ds
 
 def rescale_sum(measure, _unit_second: float, us: float):
-    bins = (np.floor(np.arange(len(measure)) * _unit_second / us) * us).astype(int)
-    df = pd.DataFrame({'bin': bins, 'value': measure})
-    return df.groupby('bin').sum().values.flatten()   
+    times = pd.to_timedelta(np.arange(len(measure)) * _unit_second, unit='s')
+    s     = pd.Series(measure, index=times)
+    freq  = pd.to_timedelta(us, unit='s')
+    return s.resample(freq).sum().values
 
 def rescale_mean(measure, _unit_second: float, us: float):
-    bins = (np.floor(np.arange(len(measure)) * _unit_second / us) * us).astype(int)
-    df = pd.DataFrame({'bin': bins, 'value': measure})
-    return df.groupby('bin').mean().values.flatten()
+    times = pd.to_timedelta(np.arange(len(measure)) * _unit_second, unit='s')
+    s     = pd.Series(measure, index=times)
+    freq  = pd.to_timedelta(us, unit='s')
+    return s.resample(freq).mean().values

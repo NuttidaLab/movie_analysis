@@ -27,9 +27,10 @@ class Dataset(ABC):
             _unit_second = unit_second
             def _load(self): return array
             
-            if rescalar:
-                def rescale(self, us: float) -> np.ndarray:
-                    return rescalar(array, unit_second, us)
+        if rescalar != False:
+            # def rescale(self, us: float) -> np.ndarray:
+            #     return rescalar(array, unit_second, us)
+            _WrappedDataset.rescale = lambda self, us: rescalar(array, unit_second, us)
         return _WrappedDataset()
     
     @property

@@ -1,5 +1,6 @@
 from data.abstract import Dataset
 from data.utils.headlines import MOVIE_HEADLINE
+from data.utils import rescale_sum, rescale_mean
 
 import os
 import glob
@@ -30,7 +31,23 @@ class Frames(Dataset):
     @property
     def objects(self) -> SimpleNamespace:
         return SimpleNamespace(people_count=People())
-
+    
+    @property
+    def measures(self) -> SimpleNamespace:
+        df = pd.read_parquet(os.path.join(os.path.dirname(__file__), "../bin/movie/measures.parquet"))
+        
+        # l1, l2, ssim, wasserstein, correlation, cosine
+        return SimpleNamespace(
+            l1          = Dataset.from_array(df.l1.values, self._unit_second, rescalar=rescale_sum),
+            l2          = Dataset.from_array(df.l2.values, self._unit_second, rescalar=rescale_sum),
+            cosine      = Dataset.from_array(df.cosine.values, self._unit_second, rescalar=rescale_sum),
+            ssim        = Dataset.from_array(df.ssim.values, self._unit_second, rescalar=rescale_sum),
+            wasserstein = Dataset.from_array(df.wasserstein.values, self._unit_second, rescalar=rescale_sum),
+            correlation = Dataset.from_array(df.correlation.values, self._unit_second, rescalar=rescale_sum),
+        )
+        
+        
+    
 class People(Dataset):
     _unit_second = 1/30  # People data is sampled at 30 Hz
     def __init__(self): super().__init__()

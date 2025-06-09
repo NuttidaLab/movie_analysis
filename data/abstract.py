@@ -22,10 +22,15 @@ class Dataset(ABC):
     def __repr__(self): return "Dataset Object :)"
     
     @classmethod
-    def from_array(cls, array: np.ndarray, unit_second: float):
+    def from_array(cls, array: np.ndarray, unit_second: float, rescalar = False):
         class _WrappedDataset(Dataset):
             _unit_second = unit_second
             def _load(self): return array
+            
+        if rescalar != False:
+            # def rescale(self, us: float) -> np.ndarray:
+            #     return rescalar(array, unit_second, us)
+            _WrappedDataset.rescale = lambda self, us: rescalar(array, unit_second, us)
         return _WrappedDataset()
     
     @property

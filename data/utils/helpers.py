@@ -1,5 +1,6 @@
 from data.abstract import Dataset
 
+import pandas as pd
 import numpy as np
 import librosa
 
@@ -23,3 +24,15 @@ def calculate_volume_and_timbre(path, hop = 512, frame = 2048):
     volume_ds = Dataset.from_array(rms_smooth, 512/sr)
     timbre_ds = Dataset.from_array(contrast_smooth, 512/sr)
     return volume_ds, timbre_ds
+
+def rescale_sum(measure, _unit_second: float, us: float):
+    times = pd.to_timedelta(np.arange(len(measure)) * _unit_second, unit='s')
+    s     = pd.Series(measure, index=times)
+    freq  = pd.to_timedelta(us, unit='s')
+    return s.resample(freq).sum().values
+
+def rescale_mean(measure, _unit_second: float, us: float):
+    times = pd.to_timedelta(np.arange(len(measure)) * _unit_second, unit='s')
+    s     = pd.Series(measure, index=times)
+    freq  = pd.to_timedelta(us, unit='s')
+    return s.resample(freq).mean().values

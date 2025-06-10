@@ -48,7 +48,7 @@ class Rates(Dataset):
 
             # norm
             base_mean, base_sd = np.mean(base_rates), np.std(base_rates)
-            enc_rate_normed = (enc_rates - base_mean)# / base_sd
+            enc_rate_normed = (enc_rates - base_mean)# / (base_sd + .01)
 
             # smoothing
             enc_rate_smoothed = gaussian_filter1d(enc_rate_normed, sigma=1)

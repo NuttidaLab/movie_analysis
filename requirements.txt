@@ -80,7 +80,6 @@ mpmath==1.3.0
 msgpack==1.1.0
 myst-nb==1.2.0
 myst-parser==4.0.1
-Naturalistic==0.1.0
 nbclient==0.10.2
 nbconvert==7.16.6
 nbformat==5.10.4

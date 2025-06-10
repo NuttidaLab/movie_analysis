@@ -2,7 +2,7 @@ name: Build & Deploy Docs
 
 on:
   push:
-    branches: [ main ]
+    branches: [ eda ]
   workflow_dispatch:
 
 permissions:

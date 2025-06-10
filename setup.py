@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from pathlib import Path
 # read the long description from README.md
 here = Path(__file__).parent
 long_description = (here / "README.md").read_text(encoding="utf-8")

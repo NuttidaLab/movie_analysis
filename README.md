@@ -1,5 +1,8 @@
 # Naturalistic Movie Analysis
 
+This repository contains code for analyzing naturalistic movie data, including the extraction of features from movie frames and the application of machine learning models to predict viewer "arousals".
+
+Addidtionally, it includes scripts for visualizing the results of these analyses.
 
 ## Quick Start
 ```bash

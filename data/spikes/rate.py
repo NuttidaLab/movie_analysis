@@ -20,7 +20,7 @@ class Rates(Dataset):
         return self.raw.groupby(bins).mean()
     
     def _preprocess_spikes(self, spikes_df, bin_dur):
-    
+        
         # ends of encoding & baseline
         enc_stop, base_stop = spikes_df['base_start'][0], spikes_df['base_stop'][0]
         
@@ -28,8 +28,8 @@ class Rates(Dataset):
         enc_bin_edges = np.arange(0, enc_stop + bin_dur, bin_dur)
         base_bin_edges = np.arange(enc_stop, base_stop + bin_dur, bin_dur)
 
-        # init
-        time_by_rates = np.zeros((len(enc_bin_edges)-1, len(spikes_df)))
+        # init empty arr to store rates
+        time_by_neur = np.zeros((len(enc_bin_edges)-1, len(spikes_df)))
 
         col_names = []
 
@@ -46,16 +46,16 @@ class Rates(Dataset):
             base_spike_counts, _ = np.histogram(neur['base_spikes'], bins=base_bin_edges)
             base_rates = base_spike_counts / bin_dur
 
-            # norm
+            # z-score encoding by baseline
             base_mean, base_sd = np.mean(base_rates), np.std(base_rates)
-            enc_rate_normed = (enc_rates - base_mean)# / (base_sd + .01)
+            enc_rate_normed = (enc_rates - base_mean) / base_sd
 
             # smoothing
             enc_rate_smoothed = gaussian_filter1d(enc_rate_normed, sigma=1)
 
             # save
-            time_by_rates[:, idx] = enc_rate_smoothed
+            time_by_neur[:, idx] = enc_rate_smoothed
 
         time_axis = np.arange(0, len(enc_bin_edges)-1) * bin_dur
         
-        return pd.DataFrame(time_by_rates, columns=col_names, index=time_axis)
+        return pd.DataFrame(time_by_neur, columns=col_names, index=time_axis)

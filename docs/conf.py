@@ -24,8 +24,8 @@ extensions = [
 
 source_suffix = {
     '.rst':  'restructuredtext',
-    '.md':   'myst-nb',
-    '.ipynb':'myst-nb',
+    '.md':   'myst_nb',
+    '.ipynb':'myst_nb',
 }
 
 autosummary_generate = True

@@ -11,7 +11,7 @@ This repository contains code for analyzing naturalistic movie data, including t
 Addidtionally, it includes scripts for visualizing the results of these analyses.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: 🚀 Tutorials:
 
    data_walk

@@ -29,7 +29,9 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install -e .
+          pip install sphinx sphinx-book-theme sphinx-autodoc-typehints myst-nb sphinx_math_dollar
 
       - name: Build Sphinx docs
         working-directory: docs

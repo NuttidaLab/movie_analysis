@@ -24,8 +24,8 @@ extensions = [
 
 source_suffix = {
     '.rst':  'restructuredtext',
-    '.md':   'myst_nb',
-    '.ipynb':'myst_nb',
+    '.md':   'myst-nb',
+    '.ipynb':'myst-nb',
 }
 
 autosummary_generate = True
@@ -56,16 +56,12 @@ autodoc_default_options = {
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
-
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'alabaster'
-html_static_path = ['_static']
 
 html_title = "Naturalistic Movie Analysis"
 # html_logo = "../../landing.gif"
@@ -81,3 +77,4 @@ html_theme_options = {
         'binderhub_url': 'https://mybinder.org'
     },
 }
+html_static_path = ['_static']

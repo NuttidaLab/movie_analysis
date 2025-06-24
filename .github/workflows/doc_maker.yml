@@ -29,7 +29,9 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install --upgrade pip
           pip install -e .
+          pip install sphinx sphinx-book-theme sphinx-autodoc-typehints myst-nb sphinx_math_dollar
 
       - name: Build Sphinx docs
         working-directory: docs
@@ -40,7 +42,7 @@ jobs:
         id: upload-pages
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/build/html
+          path: docs/_build/html
 
       # ← And deploy-pages should be v4
       - name: Deploy to GitHub Pages

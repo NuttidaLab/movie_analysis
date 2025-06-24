@@ -5,6 +5,6 @@ Datasets
    :maxdepth: 1
    :caption: Sub Datasets:
 
-    movie
-    spikes
-    behavior
+   movie
+   spikes
+   behavior

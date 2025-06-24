@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Optional, Callable, Union
 import numpy as np
 
 class Dataset(ABC):
@@ -22,19 +23,17 @@ class Dataset(ABC):
     def __repr__(self): return "Dataset Object :)"
     
     @classmethod
-    def from_array(cls, array: np.ndarray, unit_second: float, rescalar = False):
+    def from_array(cls, array, unit_second: float, rescalar: Optional[Callable] = None) -> 'Dataset':
         class _WrappedDataset(Dataset):
-            _unit_second = unit_second
+            _unit_second: float = unit_second
             def _load(self): return array
-            
-        if rescalar != False:
-            # def rescale(self, us: float) -> np.ndarray:
-            #     return rescalar(array, unit_second, us)
+
+        if rescalar is not None:
             _WrappedDataset.rescale = lambda self, us: rescalar(array, unit_second, us)
         return _WrappedDataset()
     
     @property
-    def duration(self) -> int: 
+    def duration(self) -> float: 
         return (self.n_samples - 1) * self._unit_second
     
     def _rescale_indices(self, us: float) -> np.ndarray:
